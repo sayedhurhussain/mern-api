@@ -1,6 +1,6 @@
-const asyncHandler = require('express-async-handler');
+const asyncHandler = require('express-async-handler')
 
-const Goal = require('../models/goalModel');
+const Goal = require('../models/goalModel')
 
 // const { json } = require("express")
 
