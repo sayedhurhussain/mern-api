@@ -15,7 +15,7 @@ const registerUser = asyncHandler(async (req, res) =>{
         throw new Error('Please add all field')
     }
 
-    // Check if user exixts
+    // Check if user exists
     const userExists = await User.findOne({email})
 
     if(userExists) {
@@ -25,13 +25,13 @@ const registerUser = asyncHandler(async (req, res) =>{
 
     // Hash password
     const salt = await bcrypt.genSalt(10)
-    const hasedPassword = await bcrypt.hash(password, salt)
+    const hashedPassword = await bcrypt.hash(password, salt)
 
-    // Create user
+      // Create user
     const user = await User.create({
         name,
         email,
-        password: hasedPassword
+        password: hashedPassword
     })
 
     if(user) {
@@ -69,6 +69,18 @@ const loginUser = asyncHandler(async (req, res) =>{
     }
  })
 
+// @desc    Get user data 
+// @route   POST /api/users/me
+// @access  private
+const getMe = asyncHandler(async (req, res) =>{
+    const { _id, name, email } = await User.findById(req.user.id)
+    res.status(200).json({
+        id: _id, 
+        name,
+        email,
+    })
+ })
+
  // Generate JWT
  const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -77,8 +89,8 @@ const loginUser = asyncHandler(async (req, res) =>{
  }
 
 
-
  module.exports = {
     registerUser,
     loginUser,
+    getMe
  }
